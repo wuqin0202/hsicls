@@ -6,7 +6,7 @@ class RadiationNoise:
         self.beta = beta
 
     def __call__(self, image):
-        alpha = np.random.uniform(*self.alpha_range).astype(image.dtype)
+        alpha = np.random.uniform(*self.alpha_range)
         noise = np.random.normal(loc=0.0, scale=1.0, size=image.shape).astype(image.dtype)
         return alpha * image + self.beta * noise
 

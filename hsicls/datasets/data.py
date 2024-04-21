@@ -1,7 +1,6 @@
 import numpy as np
 from torch.utils.data import Dataset
 
-__all__ = ['get_dataset', 'HyperX']
 
 def get_dataset(loader, target_folder="datasets", ignored_values=[0]):
     img, gt, label_values, rgb_bands, palette = loader(target_folder)

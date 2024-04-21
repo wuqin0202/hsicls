@@ -6,7 +6,6 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from tabulate import tabulate
 
-__all__ = ['get_dataset_info', 'get_gt_info', 'split_gt', 'padding', 'open_file']
 
 def get_dataset_info(hyperx, label_values=None):
     label_values = list(range(hyperx.num_classes)) if label_values is None else label_values
@@ -45,6 +44,7 @@ def split_gt(gt, train_size, test_size=None, mode='random', **params):
 
     train_gt = np.zeros_like(gt)
     test_gt = np.zeros_like(gt)
+    random_state = params.get('random_state', 42)
     if train_size > 1:
        train_size = int(train_size)
 
@@ -52,7 +52,7 @@ def split_gt(gt, train_size, test_size=None, mode='random', **params):
         indices = np.nonzero(gt)
         X = list(zip(*indices)) # x,y features
         y = gt[indices].ravel() # classes
-        train_indices, test_indices = train_test_split(X, train_size=train_size, test_size=test_size, stratify=y, random_state=42)
+        train_indices, test_indices = train_test_split(X, train_size=train_size, test_size=test_size, stratify=y, random_state=random_state)
         train_indices = [list(t) for t in zip(*train_indices)]
         test_indices = [list(t) for t in zip(*test_indices)]
         train_gt[*train_indices] = gt[*train_indices]
@@ -69,9 +69,9 @@ def split_gt(gt, train_size, test_size=None, mode='random', **params):
             X = list(zip(*indices)) # ((x1,y1),(x2,y2),(x3,y3),...)
 
             if counts[l] < train_size / train_ratio:
-                train, test = train_test_split(X, train_size=train_ratio, random_state=42)
+                train, test = train_test_split(X, train_size=train_ratio, random_state=random_state)
             else:
-                train, test = train_test_split(X, train_size=train_size, test_size=test_size, random_state=42)
+                train, test = train_test_split(X, train_size=train_size, test_size=test_size, random_state=random_state)
             train_indices += train
             test_indices += test
         train_indices = [list(t) for t in zip(*train_indices)]
